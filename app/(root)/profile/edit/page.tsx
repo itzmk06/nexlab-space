@@ -1,6 +1,6 @@
 import Profile from "@/components/forms/Profile";
 import { getUserById } from "@/lib/actions/user.action";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const EditProfile = async () => {
-  const { userId: clerkId } = auth();
+  const { userId: clerkId } =await auth();
   if (!clerkId) return null;
 
   const mongoUser = await getUserById({ userId: clerkId });
