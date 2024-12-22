@@ -45,6 +45,9 @@ export default function RootLayout({
        className={`${macondo.variable} ${raleway.variable} ${poppins.variable}`}
 >
         <ClerkProvider
+              publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+              signInFallbackRedirectUrl="/"
+              signUpFallbackRedirectUrl="/"
           appearance={{
             elements: {
               formButtonPrimary: "primary-gradient",
