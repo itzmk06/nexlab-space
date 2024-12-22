@@ -1,7 +1,7 @@
 import Question from "@/components/forms/Question";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Metadata, ResolvingMetadata } from "next";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const EditQuestionPage = async ({ params: { id } }: Props) => {
-  const { userId: clerkId } = auth();
+  const { userId: clerkId } =await auth();
   if (!clerkId) return null;
 
   const mongoUser = await getUserById({ userId: clerkId });

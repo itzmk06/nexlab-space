@@ -6,7 +6,7 @@ import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function CollectionPage({
   searchParams,
 }: SearchParamsProps) {
-  const { userId: clerkId } = auth();
+  const { userId: clerkId } = await auth();
 
   if (!clerkId) return null;
 

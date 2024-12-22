@@ -9,7 +9,7 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { getFormattedNumber, getTimestamp } from "@/lib/utils";
 import { URLProps } from "@/types";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +20,7 @@ const QuestionDetailPage = async ({
   searchParams,
 }: URLProps) => {
   const { question } = await getQuestionById({ questionId: id });
-  const { userId: clerkId } = auth();
+  const { userId: clerkId } =await auth();
 
   let mongoUser;
 

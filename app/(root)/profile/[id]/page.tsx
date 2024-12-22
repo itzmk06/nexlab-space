@@ -6,16 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserById, getUserInfo } from "@/lib/actions/user.action";
 import { getActualDateAndMonth } from "@/lib/utils";
 import { URLProps } from "@/types";
-import { SignedIn, auth } from "@clerk/nextjs";
+import { SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata, ResolvingMetadata } from "next";
+import { auth } from "@clerk/nextjs/server";
 
 const ProfileDetailPage = async ({
   params: { id },
   searchParams,
 }: URLProps) => {
-  const { userId: clerkId } = auth();
+  const { userId:clerkId } = await auth();
   const { user } =
     await getUserInfo({
       userId: id,

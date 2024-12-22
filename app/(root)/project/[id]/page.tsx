@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs'; // Import Clerk auth
+import { auth } from '@clerk/nextjs/server'; // Import Clerk auth
 import { Metadata } from 'next';
 import ColabButton from '@/components/shared/ColabButton'; // Import the button component
 import ApproveButton from '@/components/shared/ApproveButton'; // Import Approve Button
@@ -87,7 +87,7 @@ const ApplicantCard = ({
 );
 
 const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
-  const { userId } = auth(); // Fetch userId from Clerk
+  const { userId } =await auth(); // Fetch userId from Clerk
   try {
     const { project } = await getProjectById({ projectId: id });
 

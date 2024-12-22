@@ -9,11 +9,11 @@ import {
   GetProjectsParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 // Create a new project
 export async function createProject(params: CreateProjectParams) {
-  const { userId: authorClerkId } = auth();
+  const { userId: authorClerkId } =await auth();
   try {
     await connectToDatabase();
 
@@ -205,7 +205,7 @@ export async function rejectApplicant({ projectId, userId }: { projectId: string
 
 // Get collaborator ID from Clerk
 export async function getCollaboratorIdFromClerk() {
-  const { userId } = auth(); // Get Clerk's userId
+  const { userId } =await auth(); // Get Clerk's userId
 
   if (!userId) {
     throw new Error("Unauthorized: No userId found");
