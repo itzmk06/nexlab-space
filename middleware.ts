@@ -2,13 +2,14 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 // Define all routes as public
 const isPublicRoute = createRouteMatcher([
-  '/',                  // Home
+  '/(.*)',                  // Home
   '/community',         // Community
   '/collection',        // Collections
   '/tags',              // Tags
   '/profile/:id',       // Profile
-  '/jobs',              // Jobs
-  '/feed',              // Projects
+  '/jobs',
+  '/feed',
+  '/feed/:id',              // Projects
   '/api/webhook',       // Webhook
   '/api/webhook/clerk', // Clerk webhook
   '/sign-in(.*)',       // Sign-in (catch-all route)

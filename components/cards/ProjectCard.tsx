@@ -46,7 +46,7 @@ const ProjectCard = ({
       : "bg-green-300 dark:bg-green-300 text-green-800";
 
   return (
-    <div className="relative rounded-xl  bg-[#FFFFFF] dark:bg-[#0B0D11] p-2 py-3  sm:p-3 shadow-md hover:shadow-lg transform transition-all duration-200 ease-in-out hover:scale-101 cursor-pointer">
+    <div className="relative rounded-xl sm:py-4 bg-[#FFFFFF] dark:bg-[#0B0D11] p-2 py-3  sm:p-3 shadow-md hover:shadow-lg transform transition-all duration-200 ease-in-out hover:scale-101 cursor-pointer">
       {/* Status Badge */}
       <div
         className={`absolute top-2 right-2 text-light-100 text-xs font-semibold uppercase py-1 px-2 rounded-full shadow tracking-wide ${statusClass}`}
@@ -54,8 +54,8 @@ const ProjectCard = ({
         {status}
       </div>
 
-      <div className="flex flex-col-reverse sm:flex-row justify-between px-8 gap-2">
-        <div>
+      <div className="flex flex-col-reverse sm:flex-row justify-between py-3 px-8 gap-4">
+        <div className="flex flex-col gap-2">
           <span className="text-dark-300 dark:text-light-900 text-xs sm:hidden">
             {getTimestamp(createdAt)}
           </span>
@@ -69,7 +69,7 @@ const ProjectCard = ({
       </div>
 
       {/* Author Section */}
-      <div className="mt-3 flex items-center gap-2 px-8">
+      <div className="mt-3 flex items-center gap-2 px-9">
         <Metric
           imgUrl={author?.picture || "/assets/icons/avatar.svg"}
           alt="User"

@@ -35,14 +35,14 @@ export async function generateMetadata({ params: { id } }: URLProps): Promise<Me
 }
 
 const CollaboratorCard = ({ name, picture }: { name: string; picture?: string }) => (
-  <div className="flex flex-col items-center p-4 bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+  <div className="flex flex-col items-center p-4 bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-0 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
     {picture ? (
       <Image
         width={400}
         height={400}
         src={picture}
         alt={`${name}'s profile`}
-        className="w-16 h-16 rounded-full object-cover border-2 border-indigo-600 dark:border-indigo-400"
+        className="w-16 h-16 rounded-full object-cover "
       />
     ) : (
       <div className="w-16 h-16 flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full">
@@ -55,21 +55,15 @@ const CollaboratorCard = ({ name, picture }: { name: string; picture?: string })
   </div>
 );
 
-const ApplicantCard = ({
-  applicant,
-  projectId,
-}: {
-  applicant: applicant;
-  projectId: string;
-}) => (
-  <div className="flex flex-col items-center  p-4 bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+const ApplicantCard = ({ applicant, projectId }: { applicant: applicant; projectId: string }) => (
+  <div className="flex flex-col items-center p-4 bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-0 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
     {applicant?.picture ? (
       <Image
         width={400}
         height={400}
         src={applicant?.picture}
         alt={`${applicant?.name}'s profile`}
-        className="w-16 h-16 rounded-full object-cover border-2 border-indigo-600 dark:border-indigo-400"
+        className="w-16 h-16 rounded-full object-cover border-2 "
       />
     ) : (
       <div className="w-16 h-16 flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full">
@@ -87,7 +81,7 @@ const ApplicantCard = ({
 );
 
 const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
-  const { userId } =await auth(); // Fetch userId from Clerk
+  const { userId } = await auth(); // Fetch userId from Clerk
   try {
     const { project } = await getProjectById({ projectId: id });
 
@@ -114,7 +108,7 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
 
     return (
       <div className="w-full -mt-8 mx-auto px-4 py-2 rounded-md bg-gray-100 dark:bg-black">
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200 dark:border-gray-700">
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200 ">
           <div>
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 transition-all duration-200">
               {project.title || 'Untitled Project'}
@@ -134,9 +128,9 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
           </div>
           <span
             className={`mt-4 sm:mt-0 px-6 py-2 text-sm font-medium rounded-full ${
-              project.status === 'Active'
+              project.status === 'completed'
                 ? 'bg-green-100 text-green-800'
-                : project.status === 'Archived'
+                : project.status === 'ongoing'
                 ? 'bg-gray-200 text-gray-700'
                 : 'bg-yellow-100 text-yellow-800'
             }`}
@@ -146,20 +140,19 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
         </header>
 
         <section>
-  <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mt-10 mb-6">
-    Project Description
-  </h2>
-  <div className="mt-4 bg-white dark:bg-zinc-700 p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-    <div className="prose dark:prose-dark mt-2 text-gray-800 dark:text-zinc-200">
-      <div
-        dangerouslySetInnerHTML={{
-          __html: project.description || 'No description provided.',
-        }}
-      />
-    </div>
-  </div>
-</section>
-
+          <h2 className="text-xl font-semibold text-gray-500 dark:text-gray-300 mt-10 mb-6">
+            Project Description
+          </h2>
+          <div className="mt-4 bg-white dark:bg-[#c8cbd40c] p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="prose dark:prose-dark mt-2 text-gray-800 dark:text-zinc-200">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: project.description || 'No description provided.',
+                }}
+              />
+            </div>
+          </div>
+        </section>
 
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Author</h2>
@@ -177,7 +170,7 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
             <ColabButton projectId={id} />
           </div>
         </section>
-        
+
         {isAuthor && project?.applicants?.length > 0 && (
           <section className="mt-10">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Applicants</h2>
