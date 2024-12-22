@@ -1,11 +1,25 @@
 "use client";
 
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysUrlQuery } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import GlobalResult from "./GlobalResult";
+
+// Fallback component for Suspense
+const SearchFallback = () => (
+  <div className="flex-center flex-col">
+    <Image
+      src="/assets/icons/loading-spinner.svg"
+      width={24}
+      height={24}
+      alt="Loading"
+      className="animate-spin"
+    />
+    <p className="text-dark-200_light-800 body-regular">Loading search results...</p>
+  </div>
+);
 
 const GlobalSearch = () => {
   const router = useRouter();
@@ -87,7 +101,13 @@ const GlobalSearch = () => {
           className="paragraph-regular no-focus text-dark400_light700 placeholder border-none bg-transparent shadow-none outline-none"
         />
       </div>
-      {isOpen && <GlobalResult />}
+
+      {/* Wrap GlobalResult inside Suspense */}
+      {isOpen && (
+        <Suspense fallback={<SearchFallback />}>
+          <GlobalResult />
+        </Suspense>
+      )}
     </div>
   );
 };

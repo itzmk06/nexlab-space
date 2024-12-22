@@ -1,17 +1,14 @@
 "use client";
 
+import { Suspense, useState } from "react";
 import { HomePageFilters } from "@/constants/filters";
 import { Button } from "../ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
-
 import { formUrlQuery } from "@/lib/utils";
 
-const HomeFilters = () => {
+const HomeFiltersContent = () => {
   const searchParams = useSearchParams();
-
   const [active, setActive] = useState("");
-
   const router = useRouter();
 
   const handleFilter = (filter: string) => {
@@ -53,5 +50,11 @@ const HomeFilters = () => {
     </div>
   );
 };
+
+const HomeFilters = () => (
+  <Suspense fallback={<div>Loading filters...</div>}>
+    <HomeFiltersContent />
+  </Suspense>
+);
 
 export default HomeFilters;

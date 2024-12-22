@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { formUrlQuery } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -9,7 +10,7 @@ interface PaginationProps {
   isNext: boolean;
 }
 
-const Pagination = ({ pageNumber, isNext }: PaginationProps) => {
+const PaginationContent = ({ pageNumber, isNext }: PaginationProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -24,7 +25,7 @@ const Pagination = ({ pageNumber, isNext }: PaginationProps) => {
     });
 
     router.push(newUrl);
-  }; 
+  };
 
   if (!isNext && pageNumber === 1) return null;
 
@@ -50,5 +51,11 @@ const Pagination = ({ pageNumber, isNext }: PaginationProps) => {
     </div>
   );
 };
+
+const Pagination = (props: PaginationProps) => (
+  <Suspense fallback={<div>Loading pagination...</div>}>
+    <PaginationContent {...props} />
+  </Suspense>
+);
 
 export default Pagination;

@@ -1,10 +1,24 @@
 "use client";
 
+import { Suspense, useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysUrlQuery } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+
+// Fallback component for Suspense
+const SearchFallback = () => (
+  <div className="flex-center flex-col">
+    <Image
+      src="/assets/icons/loading-spinner.svg"
+      width={24}
+      height={24}
+      alt="Loading"
+      className="animate-spin"
+    />
+    <p className="text-dark-200_light-800 body-regular">Loading...</p>
+  </div>
+);
 
 interface CustomInputProps {
   route: string;
@@ -53,37 +67,39 @@ const LocalSearchBar = ({
   }, [search, route, pathname, router, searchParams, query]);
 
   return (
-    <div
-      className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
-    >
-      {iconPosition === "left" && (
-        <Image
-          src={imgSrc}
-          alt="search Icon"
-          width={24}
-          height={24}
-          className="cursor-pointer"
+    <Suspense fallback={<SearchFallback />}>
+      <div
+        className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
+      >
+        {iconPosition === "left" && (
+          <Image
+            src={imgSrc}
+            alt="search Icon"
+            width={24}
+            height={24}
+            className="cursor-pointer"
+          />
+        )}
+        <Input
+          type="text"
+          placeholder={placeholder}
+          value={search}
+          className="paragraph-regular no-focus text-dark100_light900 placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
         />
-      )}
-      <Input
-        type="text"
-        placeholder={placeholder}
-        value={search}
-        className="paragraph-regular no-focus text-dark100_light900 placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-      />
-      {iconPosition === "right" && (
-        <Image
-          src={imgSrc}
-          alt="search Icon"
-          width={24}
-          height={24}
-          className="cursor-pointer"
-        />
-      )}
-    </div>
+        {iconPosition === "right" && (
+          <Image
+            src={imgSrc}
+            alt="search Icon"
+            width={24}
+            height={24}
+            className="cursor-pointer"
+          />
+        )}
+      </div>
+    </Suspense>
   );
 };
 

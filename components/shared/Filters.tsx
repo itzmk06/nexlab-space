@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { formUrlQuery } from "@/lib/utils";
 
 import type { FilterProps } from "@/types";
 
-const Filters = ({
+const FiltersContent = ({
   filters,
   jobFilter = false,
 }: {
@@ -52,7 +52,7 @@ const Filters = ({
         !jobFilter && "hidden"
       }`}
     >
-      {filters.map((filter, index) => (
+      {filters.map((filter) => (
         <Button
           key={filter.value}
           onClick={() => handleTypeClick(filter.value)}
@@ -77,5 +77,11 @@ const Filters = ({
     </div>
   );
 };
+
+const Filters = (props: { filters: FilterProps[]; jobFilter?: boolean }) => (
+  <Suspense fallback={<div>Loading filters...</div>}>
+    <FiltersContent {...props} />
+  </Suspense>
+);
 
 export default Filters;
