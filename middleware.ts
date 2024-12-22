@@ -15,8 +15,6 @@ const isPublicRoute = createRouteMatcher([
   '/sign-up',           // Sign-up
   '/question/:id',      // Question details
   '/tags/:id',          // Tag details
-  'https://chatappnew-kappa.vercel.app/', // External Message link
-  'https://todo-list-project-five-sigma.vercel.app/', // External Todo link
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
