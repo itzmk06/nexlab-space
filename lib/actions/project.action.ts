@@ -10,7 +10,6 @@ import {
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs";
-import { ObjectId } from "mongoose";
 
 // Create a new project
 export async function createProject(params: CreateProjectParams) {
