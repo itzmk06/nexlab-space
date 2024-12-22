@@ -11,7 +11,9 @@ export default authMiddleware({
     "/community",
     "/jobs",
     "/api/webhook", // webhook route
-    '/api/webhook/clerk'
+    '/api/webhook/clerk',
+    '/sign-in',
+    '/sign-up'
   ],
 });
 
