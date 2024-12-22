@@ -7,6 +7,15 @@ const nextConfig = {
     serverActions: true,
     mdxRs: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*",
+      },
+      { protocol: "https", hostname: "*" },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -1,35 +1,32 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-// Define the routes you want to exclude from authentication (public routes)
+// Define all routes as public
 const isPublicRoute = createRouteMatcher([
-  '/',                  // Public home page
-  '/question/:id',      // Public question details
-  '/tags',              // Public tags page
-  '/tags/:id',          // Public tag details
-  '/profile/:id',       // Public user profile
-  '/community',         // Public community page
-  '/jobs',              // Public jobs page
-  '/api/webhook',       // Public webhook route
-  '/api/webhook/clerk', // Public clerk webhook route
-  '/sign-in',           // Public sign-in route
-  '/sign-up',           // Public sign-up route
-])
-
-// Define the routes that need to be protected (authenticated routes)
-const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',     // Protect everything under /dashboard
-  '/forum(.*)',         // Protect everything under /forum
-])
+  '/',                  // Home
+  '/community',         // Community
+  '/collection',        // Collections
+  '/tags',              // Tags
+  '/profile/:id',       // Profile
+  '/jobs',              // Jobs
+  '/feed',              // Projects
+  '/api/webhook',       // Webhook
+  '/api/webhook/clerk', // Clerk webhook
+  '/sign-in',           // Sign-in
+  '/sign-up',           // Sign-up
+  '/question/:id',      // Question details
+  '/tags/:id',          // Tag details
+  'https://chatappnew-kappa.vercel.app/', // External Message link
+  'https://todo-list-project-five-sigma.vercel.app/', // External Todo link
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   // If it's a public route, no protection is needed
-  if (isPublicRoute(req)) return
+  if (isPublicRoute(req)) return;
 
   // If it's a protected route, apply authentication
-  if (isProtectedRoute(req)) {
-    await auth.protect()  // Protect the route, requiring authentication
-  }
-})
+  // (You can add protected routes here if needed)
+  await auth.protect();  // Protect the route, requiring authentication
+});
 
 export const config = {
   matcher: [
@@ -38,4 +35,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-}
+};
