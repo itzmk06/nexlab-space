@@ -97,7 +97,7 @@ const ProjectForm = ({ mongoUserId }: Props) => {
               <FormControl>
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINY_MCE_API_KEY}
-                  onInit={(evt, editor) => {
+                  onInit={(evt, editor:any) => {
                     editorRef.current = editor;
                   }}
                   onBlur={field.onBlur}
