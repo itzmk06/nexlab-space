@@ -11,8 +11,8 @@ const isPublicRoute = createRouteMatcher([
   '/feed',              // Projects
   '/api/webhook',       // Webhook
   '/api/webhook/clerk', // Clerk webhook
-  '/sign-in',           // Sign-in
-  '/sign-up',           // Sign-up
+  '/sign-in(.*)',       // Sign-in (catch-all route)
+  '/sign-up(.*)',       // Sign-up (catch-all route)
   '/question/:id',      // Question details
   '/tags/:id',          // Tag details
 ]);
@@ -22,7 +22,6 @@ export default clerkMiddleware(async (auth, req) => {
   if (isPublicRoute(req)) return;
 
   // If it's a protected route, apply authentication
-  // (You can add protected routes here if needed)
   await auth.protect();  // Protect the route, requiring authentication
 });
 
