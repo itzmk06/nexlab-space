@@ -3,7 +3,7 @@
 import { sidebarLinks } from "@/constants/constant";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedOut, useAuth } from "@clerk/nextjs";
+import { SignedOut, useAuth} from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -121,6 +121,7 @@ export default function LeftSideBar() {
           </Link>
         </div>
       </SignedOut>
+      
       </div>
     </section>
   );
