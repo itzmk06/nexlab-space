@@ -26,6 +26,7 @@ interface Props {
   collaborators: Collaborator[];
   createdAt: Date;
   authorClerkId:String;
+  description:string
 }
 
 const ProjectCard = ({
@@ -40,12 +41,12 @@ const ProjectCard = ({
 
 
   const statusClass =
-    status === "Completed"
-      ? "bg-blue-500 dark:bg-blue-500"
+    status === "completed"
+      ? "bg-blue-500 text-white dark:bg-blue-500"
       : "bg-green-300 dark:bg-green-300 text-green-800";
 
   return (
-    <div className="relative rounded-xl bg-light-800 dark:bg-[#0D111C] p-2 sm:p-3 shadow-md hover:shadow-lg transform transition-all duration-200 ease-in-out hover:scale-101 cursor-pointer">
+    <div className="relative rounded-xl  bg-[#FFFFFF] dark:bg-[#0B0D11] p-2 py-3  sm:p-3 shadow-md hover:shadow-lg transform transition-all duration-200 ease-in-out hover:scale-101 cursor-pointer">
       {/* Status Badge */}
       <div
         className={`absolute top-2 right-2 text-light-100 text-xs font-semibold uppercase py-1 px-2 rounded-full shadow tracking-wide ${statusClass}`}
@@ -53,14 +54,14 @@ const ProjectCard = ({
         {status}
       </div>
 
-      <div className="flex flex-col-reverse sm:flex-row justify-between items-start gap-2">
+      <div className="flex flex-col-reverse sm:flex-row justify-between px-8 gap-2">
         <div>
           <span className="text-dark-300 dark:text-light-900 text-xs sm:hidden">
             {getTimestamp(createdAt)}
           </span>
           {/* Link to the detailed project page */}
           <Link href={`/project/${_id}`}>
-            <h3 className="h3-bold text-dark-200 dark:text-light-900 line-clamp-2 hover:text-dark-100 dark:hover:text-light-700 transition-all duration-200 ease-in-out ">
+            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {title}
             </h3>
           </Link>
@@ -68,7 +69,7 @@ const ProjectCard = ({
       </div>
 
       {/* Author Section */}
-      <div className="mt-3 flex items-center gap-2">
+      <div className="mt-3 flex items-center gap-2 px-8">
         <Metric
           imgUrl={author?.picture || "/assets/icons/avatar.svg"}
           alt="User"
@@ -82,7 +83,7 @@ const ProjectCard = ({
 
       {/* Collaborators Section */}
       {collaborators.length > 0 && (
-        <div className="mt-4 flex items-center gap-1 ml-3">
+        <div className="mt-4 flex items-center gap-1 ml-3 px-8">
           {collaborators.slice(0, 3).map((collaborator) => (
             <div key={collaborator._id} className="relative group -ml-4">
               <Image

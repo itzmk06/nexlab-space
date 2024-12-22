@@ -10,6 +10,7 @@ import {
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs";
+import { ObjectId } from "mongoose";
 
 // Create a new project
 export async function createProject(params: CreateProjectParams) {
@@ -223,3 +224,49 @@ export async function getCollaboratorIdFromClerk() {
 }
 
 
+// Mark the project as completed
+export async function markProjectAsCompleted({ projectId }: { projectId: string }) {
+  try {
+    await connectToDatabase();
+
+    // Find the project by ID
+    const project = await Project.findById(projectId);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    // Check if the project is already completed
+    if (project.status === 'completed') {
+      return { message: 'Project is already completed' };
+    }
+
+    // Mark the project as completed
+    project.status = 'completed';
+
+    // Save the updated project
+    await project.save();
+
+    // Revalidate the project path for cache updates
+    revalidatePath(`/projects/${projectId}`);
+    
+    return { message: 'Project successfully marked as completed' };
+  } catch (error) {
+    console.error('Error marking project as completed:', error);
+    throw new Error('Failed to mark project as completed');
+  }
+}
+
+export async function getUserProjects(userId: string) {
+  try {
+    await connectToDatabase();
+
+    const projects = await Project.find({ author: userId })
+      .populate("author", "name picture")
+      .populate("collaborators", "name picture");
+
+    return { projects };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

@@ -11,6 +11,30 @@ export const metadata: Metadata = {
   title: "Projects | NexLab",
   description: "Explore projects, collaborate with developers, and create new opportunities.",
 };
+interface Author {
+  _id: string;
+  name: string;
+  picture?: string; 
+  clerkId: string;
+}
+
+interface Collaborator {
+  _id: string;
+  name: string;
+  picture?: string;
+}
+interface Props {
+  clerkId?: string | null;
+  _id: string;
+  title: string;
+  author: Author;
+  status: string;
+  collaborators: Collaborator[];
+  createdAt: Date;
+  authorClerkId:String;
+  description:string
+}
+
 
 export default async function ProjectFeed({ searchParams }: SearchParamsProps) {
 
@@ -43,7 +67,7 @@ export default async function ProjectFeed({ searchParams }: SearchParamsProps) {
       </div>
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.projects.length > 0 ? (
-          result.projects.map((project) => (
+          result.projects.map((project:Props) => (
             <ProjectCard
               key={project._id}
               title={project.title}
@@ -51,7 +75,6 @@ export default async function ProjectFeed({ searchParams }: SearchParamsProps) {
               description={project.description}
               author={project.author}
               collaborators={project.collaborators}
-              savedBy={project.savedBy}
               status={project.status}
               _id={project._id}
               createdAt={project.createdAt}

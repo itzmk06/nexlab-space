@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import ColabButton from '@/components/shared/ColabButton'; // Import the button component
 import ApproveButton from '@/components/shared/ApproveButton'; // Import Approve Button
 import RejectButton from '@/components/shared/RejectButton'; // Import Reject Button
+import CompleteProjectButton from '@/components/shared/CompleteProjectButton'; // Import Complete Project Button
 import { getProjectById } from '@/lib/actions/project.action';
 import Image from 'next/image';
 import User from '@/database/user.model';
@@ -110,8 +111,9 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
         };
       })
     );
+
     return (
-      <div className="w-full -mt-8 mx-auto px-4 py-2 rounded-md   bg-gray-100 dark:bg-black ">
+      <div className="w-full -mt-8 mx-auto px-4 py-2 rounded-md bg-gray-100 dark:bg-black">
         <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200 dark:border-gray-700">
           <div>
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 transition-all duration-200">
@@ -144,19 +146,20 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
         </header>
 
         <section>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mt-10 mb-6">
-            Project Description
-          </h2>
-          <div className="mt-4 bg-white dark:bg-[#0F1117] p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="prose dark:prose-dark mt-2  text-gray-600 dark:text-gray-300">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: project.description || 'No description provided.',
-                }}
-              />
-            </div>
-          </div>
-        </section>
+  <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mt-10 mb-6">
+    Project Description
+  </h2>
+  <div className="mt-4 bg-white dark:bg-zinc-700 p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="prose dark:prose-dark mt-2 text-gray-800 dark:text-zinc-200">
+      <div
+        dangerouslySetInnerHTML={{
+          __html: project.description || 'No description provided.',
+        }}
+      />
+    </div>
+  </div>
+</section>
+
 
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Author</h2>
@@ -174,6 +177,7 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
             <ColabButton projectId={id} />
           </div>
         </section>
+        
         {isAuthor && project?.applicants?.length > 0 && (
           <section className="mt-10">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Applicants</h2>
@@ -182,6 +186,12 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
                 <ApplicantCard key={applicant?._id} applicant={applicant} projectId={id} />
               ))}
             </div>
+          </section>
+        )}
+
+        {isAuthor && (
+          <section className="mt-10">
+            <CompleteProjectButton projectId={id} />
           </section>
         )}
       </div>
