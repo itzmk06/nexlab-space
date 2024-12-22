@@ -5,7 +5,7 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
     serverComponentsExternalPackages: ["mongoose"],
-    missingSuspenseWithCSRBailout: false,
+    serverActions: true, 
   },
   images: {
     remotePatterns: [
