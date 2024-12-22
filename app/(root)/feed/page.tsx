@@ -1,14 +1,9 @@
 import ProjectCard from "@/components/cards/ProjectCard";
-import HomeFilters from "@/components/home/HomeFilters";
-import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
-import Pagination from "@/components/shared/Pagination";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { Button } from "@/components/ui/button";
-import { HomePageFilters } from "@/constants/filters";
 import { getProjects } from "@/lib/actions/project.action";
 import { SearchParamsProps } from "@/types";
-import { auth } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -18,19 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectFeed({ searchParams }: SearchParamsProps) {
-  let result;
 
-  // Define valid filters
-  const validFilters = ["ongoing", "completed"] as const;
-
-  // Validate the filter
-  const filter = searchParams.filter && validFilters.includes(searchParams.filter)
-    ? searchParams.filter
-    : undefined;
-
-    result = await getProjects({
+    const result = await getProjects({
       searchQuery: searchParams.q,
-      filter, // Use the validated filter here
     });
   
 
