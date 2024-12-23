@@ -21,14 +21,11 @@ export default async function CollectionPage({
   const { userId: clerkId } = await auth();
 
   if (!clerkId) return null;
+
   const result = await getSavedQuestions({
     clerkId,
-    // @ts-ignore
     searchQuery: searchParams.q,
-    // @ts-ignore
     filter: searchParams.filter,
-    // @ts-ignore
-
     page: searchParams?.page ? +searchParams.page : 1,
   });
   return (
