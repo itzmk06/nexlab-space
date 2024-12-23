@@ -70,7 +70,7 @@ const QuestionsTab = async ({
         <NoResult
           title="No projects to display"
           description="It looks like there are no projects available. Be the first to contribute and create a new project!"
-          link="/create-project"
+          link="/post-project"
           linkTitle="Create a Project"
         />
       )}
