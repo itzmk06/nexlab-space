@@ -19,8 +19,10 @@ export const metadata: Metadata = {
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const { userId: clerkId } = await auth();
-
+  
   // Resolve `searchParams` in case it is asynchronous
+  
+  // @ts-ignore
   const resolvedSearchParams = await Promise.resolve(searchParams);
 
   let result;
