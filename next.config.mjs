@@ -1,24 +1,22 @@
-// next.config.mjs
-export default {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   experimental: {
     serverActions: true,
     mdxRs: true,
-    serverComponentsExternalPackages: ["mongoose"],
-    missingSuspenseWithCSRBailout: false,
+    serverComponentsExternalPackages: ['mongoose']
   },
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "*",
-      },
+        protocol: 'https',
+        hostname: '*'
+      }, 
       {
-        protocol: "https",
-        hostname: "*",
-      },
-    ],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,  // Disables ESLint during build
-  },
-};
+        protocol: 'http',
+        hostname: '*'
+      }, 
+    ]
+  }
+}
+
+module.exports = nextConfig
