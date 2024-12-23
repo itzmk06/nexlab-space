@@ -59,7 +59,7 @@ export const sidebarLinks: SidebarLink[] = [
     // External Links
     {
         icon: "fi fi-sr-paper-plane",
-        route: "https://chatappnew-kappa.vercel.app/",
+        route: "https://realtime-chat-application-pearl.vercel.app/",
         label: "Messages",
         color: "#00BCD4", // Cyan for a calm and professional look
         hoverColor: "hover:bg-[#00BCD4] hover:bg-opacity-30",
