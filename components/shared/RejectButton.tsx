@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { rejectApplicant } from '@/lib/actions/project.action';
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 import { toast } from '../ui/use-toast';
 
 const RejectButton = ({ projectId, userId }: { projectId: string, userId: string }) => {
@@ -16,7 +16,7 @@ const RejectButton = ({ projectId, userId }: { projectId: string, userId: string
 
     try {
       await rejectApplicant({ projectId, userId });
-      revalidatePath(`/project/${projectId}`);
+      // revalidatePath(`/project/${projectId}`);
 
       toast({
         title: 'Applicant Rejected!',

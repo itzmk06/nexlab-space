@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { markProjectAsCompleted } from '@/lib/actions/project.action';
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 import { toast } from "../ui/use-toast";
 
 const CompleteProjectButton = ({ projectId }: { projectId: string }) => {
@@ -16,7 +16,7 @@ const CompleteProjectButton = ({ projectId }: { projectId: string }) => {
 
     try {
       await markProjectAsCompleted({ projectId });
-      revalidatePath(`/projects/${projectId}`);
+      // revalidatePath(`/projects/${projectId}`);
 
       toast({
         title: 'Project marked as completed!',

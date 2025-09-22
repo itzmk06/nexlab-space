@@ -1,22 +1,27 @@
-import { authMiddleware } from "@clerk/nextjs";
- 
-export default authMiddleware({
-  publicRoutes: [
-    '/',
-    '/api/webhook',
-    'question/:id',
-    '/tags',
-    '/tags/:id',
-    '/profile/:id',
-    '/community',
-    '/jobs'
-  ],
-  ignoredRoutes: [
-    '/api/webhook', '/api/chatgpt'
-  ]
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+
+const isPublic = createRouteMatcher([
+  '/',
+  '/api/webhook',
+  '/question(.*)',
+  '/tags(.*)',
+  '/profile(.*)',
+  '/community',
+  '/jobs'
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (!isPublic(req)) {
+    auth.protect(); // redirect to sign-in if not authenticated
+  }
+  return NextResponse.next();
 });
- 
+
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    '/((?!.*\\..*|_next).*)',
+    '/',
+    '/(api|trpc)(.*)'
+  ]
 };
- 

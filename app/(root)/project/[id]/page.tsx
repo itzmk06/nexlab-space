@@ -1,31 +1,20 @@
-import { auth } from '@clerk/nextjs/server'; // Import Clerk auth
+import { auth } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
-import ColabButton from '@/components/shared/ColabButton'; // Import the button component
-import ApproveButton from '@/components/shared/ApproveButton'; // Import Approve Button
-import RejectButton from '@/components/shared/RejectButton'; // Import Reject Button
-import CompleteProjectButton from '@/components/shared/CompleteProjectButton'; // Import Complete Project Button
+import ColabButton from '@/components/shared/ColabButton';
+import ApproveButton from '@/components/shared/ApproveButton';
+import RejectButton from '@/components/shared/RejectButton';
+import CompleteProjectButton from '@/components/shared/CompleteProjectButton';
 import { getProjectById } from '@/lib/actions/project.action';
 import Image from 'next/image';
 import User from '@/database/user.model';
 import { ObjectId } from 'mongoose';
 
 type URLProps = {
-  params: {
-    id: string;
-  };
+  params: { id: string };
 };
 
-type collaborator = {
-  _id: string;
-  name: string;
-  picture?: string;
-};
-
-type applicant = {
-  _id: string;
-  name: string;
-  picture?: string;
-};
+type collaborator = { _id: string; name: string; picture?: string };
+type applicant = { _id: string; name: string; picture?: string };
 
 export async function generateMetadata({ params: { id } }: URLProps): Promise<Metadata> {
   return {
@@ -42,7 +31,7 @@ const CollaboratorCard = ({ name, picture }: { name: string; picture?: string })
         height={400}
         src={picture}
         alt={`${name}'s profile`}
-        className="w-16 h-16 rounded-full object-cover "
+        className="w-16 h-16 rounded-full object-cover"
       />
     ) : (
       <div className="w-16 h-16 flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full">
@@ -63,7 +52,7 @@ const ApplicantCard = ({ applicant, projectId }: { applicant: applicant; project
         height={400}
         src={applicant?.picture}
         alt={`${applicant?.name}'s profile`}
-        className="w-16 h-16 rounded-full object-cover border-2 "
+        className="w-16 h-16 rounded-full object-cover border-2"
       />
     ) : (
       <div className="w-16 h-16 flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full">
@@ -81,11 +70,12 @@ const ApplicantCard = ({ applicant, projectId }: { applicant: applicant; project
 );
 
 const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
-  const { userId } = await auth(); // Fetch userId from Clerk
-  try {
-    const { project } = await getProjectById({ projectId: id });
+  const { userId } = await auth();
 
-    if (!project) {
+  try {
+    // Fetch project as plain object
+    const { project: rawProject } = await getProjectById({ projectId: id });
+    if (!rawProject) {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
           <h1 className="text-2xl font-semibold">Project Not Found</h1>
@@ -94,10 +84,15 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
       );
     }
 
+    // Convert Mongoose document to plain object
+    const project = JSON.parse(JSON.stringify(rawProject));
+
     const isAuthor = userId === project?.authorClerkId;
+
+    // Convert applicants to plain objects
     const applicantsWithDetails = await Promise.all(
       project.applicants?.map(async (applicantId: ObjectId) => {
-        const user = await User.findById(applicantId);
+        const user = await User.findById(applicantId).lean();
         return {
           _id: user?._id.toString(),
           name: user?.name || 'Unknown',
@@ -108,7 +103,8 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
 
     return (
       <div className="w-full -mt-8 mx-auto px-4 py-2 rounded-md bg-gray-100 dark:bg-black">
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200 ">
+        {/* Header */}
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200">
           <div>
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 transition-all duration-200">
               {project.title || 'Untitled Project'}
@@ -139,26 +135,23 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
           </span>
         </header>
 
+        {/* Description */}
         <section>
-          <h2 className="text-xl font-semibold text-gray-500 dark:text-gray-300 mt-10 mb-6">
-            Project Description
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-500 dark:text-gray-300 mt-10 mb-6">Project Description</h2>
           <div className="mt-4 bg-white dark:bg-[#c8cbd40c] p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
             <div className="prose dark:prose-dark mt-2 text-gray-800 dark:text-zinc-200">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: project.description || 'No description provided.',
-                }}
-              />
+              <div dangerouslySetInnerHTML={{ __html: project.description || 'No description provided.' }} />
             </div>
           </div>
         </section>
 
+        {/* Author */}
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Author</h2>
           <CollaboratorCard name={project?.author?.name || 'Unknown'} picture={project?.author?.picture} />
         </section>
 
+        {/* Collaborators */}
         <section>
           <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mt-10 mb-6">Collaborators</h2>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -166,11 +159,14 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
               <CollaboratorCard key={collaborator?._id} name={collaborator?.name} picture={collaborator?.picture} />
             ))}
           </div>
-          <div className="mt-6 text-center">
-            <ColabButton projectId={id} />
-          </div>
+  {project.status === 'ongoing' && !isAuthor && (
+    <div className="mt-6 text-center">
+      <ColabButton projectId={id} />
+    </div>
+  )}
         </section>
 
+        {/* Applicants */}
         {isAuthor && project?.applicants?.length > 0 && (
           <section className="mt-10">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Applicants</h2>
@@ -182,6 +178,7 @@ const ProjectDetailPage = async ({ params: { id } }: URLProps) => {
           </section>
         )}
 
+        {/* Complete Project Button */}
         {isAuthor && (
           <section className="mt-10">
             <CompleteProjectButton projectId={id} />
